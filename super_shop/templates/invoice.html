@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load cart %}
+{% load static %}
+{% load custom_filter %}
+{% block content %}
+{% block title %}
+<title>Inovice No:{{order.id}}</title>
+{% endblock %}
+<style>
+table, td, th {
+    border: 1px solid black;
+
+    font-size: 14px;
+    text-align:center;
+   
+  }
+  tr {
+  height: 50px;
+}
+img{
+float:left;
+}
+h2{
+padding-left:560px;
+}
+
+</style>
+<div class="input-group mb-3">
+   
+    <div style="margin: auto">
+      <h2 >Inovice Date: {{order.date}}</h2>
+     Inovice No  :{{order.id}}
+      <img src="{{order.info_qr_code.path}}" width="300px" >
+      
+    
+    </div>
+  </div>
+  
+  <div>
+
+  </div>
+  <table class="table">
+  <thead>
+    <tr >
+      <th style="width:10%;">Sl NO</th>
+      <th style="width:40%">Itels</th> 
+      <th style="width:20%">Unite Price</th>
+      <th style="width:10%">QTY</th>
+      <th style="width:20%">Total</th>
+    </tr>
+   </thead>
+   <tbody>
+     {% for product in products %}
+        
+        <tr style="width:100% ;">
+            <td style="width:10% ;">{{forloop.counter}}</td>
+            <td style="width:40%;">
+              <div style="">{{product.name}}</div>
+            </td>
+           
+            <td  style="width:20%;"> {{product.unit_price}} BDT</td>
+            <td style="width:10%;">{{product|cart_quantity:cart}}</td>
+            <td style="width:20%;">{{product|price_total:cart}} BDT</td>
+        
+        </tr>
+        
+     
+        {% endfor %}
+  </tbody>
+  <tfoot style="width:100%;">
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th >Total Amount</th>
+            <th>{{order.total_price}} BDT</th>
+        </tr>
+    </tfoot>
+</table>
+    
+   <div class=''>
+    <h1>Amount in words : {{total_price}} taka only </h1>
+   </div> 
+        
+
+ 
+{% endblock %}

@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load cart %}
+{% load custom_filter %}
+{% load static %}
+
+{% block content %}
+<meta http-equiv="refresh" content="50">
+<script  type ="text/javascript"  src="{% static 'js/Storage.js' %}"></script>
+
+<div class="p-5 m-5 border border-info"> 
+ 
+    <div>
+     <a href="{% url 'main' %}"><strong>Back</strong></a>
+    <form id='form1' action="{% url 'cart_submit' %}" method="POST" target="_blank"> 
+        {% csrf_token %} 
+    {{form.as_p}}
+    <input type="text" value='gg' name="total_price" id='price' hidden>
+    </form>  
+
+
+<form name=ShoppingList method="POST" id="myForm" action="{% url 'add_cart'%}">
+    {% csrf_token %} 
+<label>Products list</label> 
+<select name='product' id="id"required="True">
+<option value="">None</option>
+{% for i in products %}
+<option  value={{i.id}} name='product' >{{i.name}}</option>
+
+{% endfor %}
+</select>
+<label>Quantity</label><input type="number" value=" " name='qty' id="qty" required >
+ 
+
+</form> 
+<button onclick="SaveItem()">Add to Shoping List</button>
+<div id="items_table">
+    <h3>Shopping List</h3>
+    {% if request.session.cart %}
+
+    <div id="myformclass">
+    <table class="table">
+      
+    <thead>
+        <tr>
+            <th>Sno.</th>
+           
+            <th>Name</th>
+            <th>Product Code</th>
+            <th>Price</th>
+            <th>Qtn</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    
+    <tbody>
+        {% for product in cart_products %}
+        
+        <tr style="width:100% ;">
+            <td style="width:1% ;">{{forloop.counter}}</td>
+            <td style="width:3%;">
+              <div class="row">{{product.name}}</div>
+            </td>
+            <td style="width:5%;"> {{product.product_code}}  </td>
+            <td  style="width:4%;"> {{product.unit_price|currency}}</td>
+            <td style="width:4%;">{{product|cart_quantity:request.session.cart}}</td>
+            <td style="width:10%;">{{product|price_total:request.session.cart|currency}}</td>
+           <td  style="width:2%;"><a href="{% url 'clear' product.id %}">X</a></td>
+        </tr>
+        
+     
+        {% endfor %}
+    </tbody>
+
+    <tfoot style="width:100%;">
+        <tr>
+            <th colspan="4"></th>
+            <th class="" colspan="">Total</th>
+            <th id='total_price' >{{cart_products|total_cart_price:request.session.cart|currency}}</th>
+        </tr>
+    </tfoot>
+</table>
+</div>
+{% endif %}
+   
+<label><a href="{% url 'clear_all'  %}">clear</a>
+ <i>* Delete all items</i></label>
+   
+</div>
+
+</div>
+<input type="button" value="Creat Bill" onclick="CreatBill()">
+{% if message %}
+<script>
+    window.alert("{{message}}")
+</script>
+
+{% endif %}
+</div>
+
+{% endblock %}

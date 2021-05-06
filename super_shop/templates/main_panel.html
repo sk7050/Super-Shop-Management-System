@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="{% static 'css/main_panel.css' %}">
+</head>
+<body style="font-family:Verdana;color:#aaaaaa;">
+
+<div style="background-color:#e5e5e5;padding:15px;text-align:center;">
+ 
+  <h1>Logged In by {{user_obj.name}}</h1>
+</div>
+
+<div style="overflow:auto">
+  <div class="menu">
+    {% if user_obj.is_admin %}
+    <a href="/admin" target="_blank">Admin Panel</a>
+    {% endif %}
+    <a href="{% url 'category' %}">Add Catagories</a>
+    <a href="{% url 'product' %}">Add Products</a>
+    <a href="{% url 'logout' %}">Logout</a>
+    
+  </div>
+
+  <div class="main">
+    <h2>Product Management</h2>
+    <div class="ex1">
+    <table id="customers">
+        <tr>
+
+          <th>Product code</th>
+          <th> Name</th>
+          <th> Category</th>
+          <th>Dsc.</th>
+          <th>Unit Price</th>
+          <th>Quantity</th>
+          <th>Action </th>
+
+        </tr>
+        {% for i in products %}
+        <tr>
+          <td>{{i.product_code}}</td>
+          <td>{{i.name}}</td>
+          <td>{{i.category}}</td>
+          <td>{{i.description}}</td>
+          <td>{{i.unit_price}} BDT</td>
+         <td>{{i.quantity}} Units</td>
+          <td><a href="{% url 'edit' i.id %}">Edit</a> 
+           <a href="{% url 'delete' i.id %}"> Delete</a>
+          </td>
+
+        </tr>
+        {% endfor %}
+        
+      </table>
+    </div>
+  </div>
+  <div class="right">
+    <h2>Order Management</h2>
+    <hr>
+    <a href="{% url 'order' %}">Creat An Order</a>
+    <hr>
+   
+    <input type="text" id="bill_no" value='' placeholder="Bill No">
+     
+  
+    <input type="submit" value="Print Bill" onclick="print()">
+  </div>
+  
+</div>
+
+<div style="background-color:#e5e5e5;text-align:center;padding:10px;margin-top:7px;">© copyright Sk Faisal</div>
+<script  type ="text/javascript"  src="{% static 'js/Storage.js' %}"></script>
+</body>
+</html>
