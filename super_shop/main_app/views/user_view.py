@@ -87,7 +87,9 @@ class Login_user(View):
     def post(self,request):
         email = request.POST['email']
         password = request.POST['password']
-        
+        if len(MyUser.objects.filter(email=email))==0:
+          messages.error(request,'Please Signup frist')
+          return render(request,'login.html')
         user = authenticate(request, email=email, password=password)
         
         ''' checking is_staf or not if is is_staf then premit to login'''
